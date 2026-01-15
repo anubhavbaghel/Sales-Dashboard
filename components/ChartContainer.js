@@ -26,9 +26,9 @@ export default function ChartContainer({ barData, lineData, pieData }) {
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="glass-panel p-3 text-sm border border-white/20">
-                    <p className="font-bold mb-1 text-white">{label}</p>
-                    <p className="text-white">{`Revenue: $${payload[0].value.toFixed(2)}`}</p>
+                <div className="glass-panel p-3 text-sm">
+                    <p className="font-bold mb-1 text-foreground">{label}</p>
+                    <p className="text-foreground">{`Revenue: $${payload[0].value.toFixed(2)}`}</p>
                 </div>
             );
         }
@@ -38,9 +38,9 @@ export default function ChartContainer({ barData, lineData, pieData }) {
     const PieTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="glass-panel p-3 text-sm border border-white/20">
-                    <p className="font-bold mb-1 text-white">{payload[0].name}</p>
-                    <p className="text-white">{`Revenue: $${payload[0].value.toFixed(2)}`}</p>
+                <div className="glass-panel p-3 text-sm">
+                    <p className="font-bold mb-1 text-foreground">{payload[0].name}</p>
+                    <p className="text-foreground">{`Revenue: $${payload[0].value.toFixed(2)}`}</p>
                 </div>
             );
         }
