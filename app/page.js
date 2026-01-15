@@ -14,10 +14,14 @@ export default function Home() {
   const [data, setData] = useState(null);
   const [filteredData, setFilteredData] = useState(null);
   const [productList, setProductList] = useState([]);
+  const [availableYears, setAvailableYears] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
   const [filters, setFilters] = useState({
     minValue: null,
     maxValue: null,
-    product: null
+    product: null,
+    year: null,
+    month: null
   });
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -39,6 +43,10 @@ export default function Home() {
       const products = salesData.pieData.map(item => item.name);
       setProductList(products);
 
+      // Set available years and months
+      setAvailableYears(salesData.years);
+      setAvailableMonths(salesData.months);
+
       setLoading(false);
     }
     loadData();
@@ -49,27 +57,63 @@ export default function Home() {
 
     let filtered = { ...data };
 
+    // Filter by year
+    if (filters.year) {
+      filtered.barData = filtered.barData.filter(item => item.year === filters.year);
+    }
+
+    // Filter by month
+    if (filters.month) {
+      filtered.barData = filtered.barData.filter(item => item.month === filters.month);
+    }
+
     // Filter by order value
     if (filters.minValue !== null || filters.maxValue !== null) {
       const min = filters.minValue || 0;
       const max = filters.maxValue || Infinity;
 
-      filtered.barData = data.barData.filter(item => item.value >= min && item.value <= max);
-      filtered.lineData = data.lineData.filter(item => {
-        const originalIndex = data.lineData.indexOf(item);
-        const originalValue = data.barData[originalIndex]?.value || 0;
-        return originalValue >= min && originalValue <= max;
-      });
-
-      // Recalculate cumulative for line chart
-      let cumulative = 0;
-      filtered.lineData = filtered.barData.map(item => {
-        cumulative += item.value;
-        return { name: item.name, value: cumulative };
-      });
+      filtered.barData = filtered.barData.filter(item => item.value >= min && item.value <= max);
     }
 
-    // Filter by product
+    // Apply filters to line chart (based on remaining bar data IDs)
+    // Note: lineData is separate, we need to map names or IDs. 
+    // Since everything is Order Based, we can just grab names from barData.
+    const activeOrderNames = new Set(filtered.barData.map(item => item.name));
+    filtered.lineData = data.lineData.filter(item => activeOrderNames.has(item.name));
+
+    // Recalculate cumulative for line chart
+    let cumulative = 0;
+    filtered.lineData = filtered.lineData.map(item => {
+      cumulative += item.value; // Note: original value was cumulative. We need original slice value? 
+      // Currently lineData in api.js has cumulative already. 
+      // Refactor: We need the precise item value to re-accumulate.
+      // Actually, data.barData has the raw values. Let's rebuild lineData from filtered.barData
+      return {
+        name: item.name,
+        value: cumulative,
+        year: item.year,
+        month: item.month,
+        fullName: item.fullName
+      };
+    });
+
+    // Rebuild lineData purely from filtered barData to ensure correctness
+    cumulative = 0;
+    filtered.lineData = filtered.barData.map(item => {
+      cumulative += item.value;
+      return {
+        name: item.name,
+        value: cumulative,
+        year: item.year,
+        month: item.month,
+        fullName: item.fullName
+      };
+    });
+
+
+    // Filter by product (Pie Chart independent of orders?)
+    // If order filtering applies to Pie Chart, we need order->product mapping.
+    // The current API structure separates them. So Product Filter only affects Pie Chart.
     if (filters.product) {
       filtered.pieData = data.pieData.filter(item => item.name === filters.product);
     }
@@ -90,7 +134,7 @@ export default function Home() {
     setFilters(newFilters);
   };
 
-  const hasActiveFilters = filters.minValue || filters.maxValue || filters.product;
+  const hasActiveFilters = filters.minValue || filters.maxValue || filters.product || filters.year || filters.month;
 
   if (loading || !filteredData) {
     return (
@@ -103,17 +147,18 @@ export default function Home() {
   const { totalRevenue, totalOrders, averageOrderValue, barData, lineData, pieData } = filteredData;
 
   return (
-    <div className="h-screen flex flex-col text-foreground overflow-hidden" style={{ background: 'var(--background)' }}>
-      {/* Mobile Header - Only visible on mobile */}
-      <div className="mobile-hide mobile-header">
+    <div className="min-h-screen flex flex-col font-sans selection:bg-white/20">
+      {/* Mobile Header */}
+      <header className="mobile-header mobile-hide border-b border-white/5 bg-white/[0.02]">
         <div className="flex items-center gap-3">
-          <h1 className="text-lg font-bold text-foreground">Dashboard</h1>
-          <p className="text-xs text-muted-foreground">{date}</p>
+          <div className="h-8 w-8 rounded-xl bg-white text-black flex items-center justify-center font-bold">
+            S
+          </div>
+          <span className="font-bold text-foreground">Sales</span>
         </div>
         <button
           onClick={toggleTheme}
-          className="h-8 w-8 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center transition-all duration-300"
-          aria-label="Toggle theme"
+          className="h-8 w-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-all duration-300"
         >
           {theme === 'dark' ? (
             <Sun size={14} className="text-white" />
@@ -121,7 +166,7 @@ export default function Home() {
             <Moon size={14} className="text-foreground" />
           )}
         </button>
-      </div>
+      </header>
 
       {/* Main Container - Flex row on desktop, column on mobile */}
       <div className="flex-1 flex overflow-hidden">
@@ -165,6 +210,8 @@ export default function Home() {
               onFilterChange={handleFilterChange}
               activeFilters={filters}
               products={productList}
+              years={availableYears} // Pass years to FilterPanel
+              months={availableMonths} // Pass months
             />
           </div>
         </aside>
@@ -188,6 +235,8 @@ export default function Home() {
                       onFilterChange={handleFilterChange}
                       activeFilters={filters}
                       products={productList}
+                      years={availableYears}
+                      months={availableMonths} // Pass months
                     />
                   </div>
                 )}

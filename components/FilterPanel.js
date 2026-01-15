@@ -3,16 +3,20 @@
 import { useState } from 'react';
 import { Filter, X } from 'lucide-react';
 
-export default function FilterPanel({ onFilterChange, activeFilters, products = [] }) {
+export default function FilterPanel({ onFilterChange, activeFilters, products = [], years = [], months = [] }) {
     const [minValue, setMinValue] = useState(activeFilters.minValue || '');
     const [maxValue, setMaxValue] = useState(activeFilters.maxValue || '');
     const [selectedProduct, setSelectedProduct] = useState(activeFilters.product || '');
+    const [selectedYear, setSelectedYear] = useState(activeFilters.year || '');
+    const [selectedMonth, setSelectedMonth] = useState(activeFilters.month || '');
 
     const handleApplyFilters = () => {
         onFilterChange({
             minValue: minValue ? parseFloat(minValue) : null,
             maxValue: maxValue ? parseFloat(maxValue) : null,
-            product: selectedProduct === 'All Products' ? null : selectedProduct
+            product: selectedProduct === 'All Products' ? null : selectedProduct,
+            year: selectedYear ? parseInt(selectedYear) : null,
+            month: selectedMonth === 'All Months' || selectedMonth === '' ? null : selectedMonth
         });
     };
 
@@ -20,14 +24,18 @@ export default function FilterPanel({ onFilterChange, activeFilters, products = 
         setMinValue('');
         setMaxValue('');
         setSelectedProduct('');
+        setSelectedYear('');
+        setSelectedMonth('');
         onFilterChange({
             minValue: null,
             maxValue: null,
-            product: null
+            product: null,
+            year: null,
+            month: null
         });
     };
 
-    const hasActiveFilters = minValue || maxValue || selectedProduct;
+    const hasActiveFilters = minValue || maxValue || selectedProduct || selectedYear || selectedMonth;
 
     return (
         <div className="glass-panel p-3">
@@ -42,6 +50,48 @@ export default function FilterPanel({ onFilterChange, activeFilters, products = 
             </div>
 
             <div className="space-y-3">
+                {/* Year Filter */}
+                {years.length > 0 && (
+                    <div>
+                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
+                            Year
+                        </label>
+                        <select
+                            value={selectedYear}
+                            onChange={(e) => setSelectedYear(e.target.value)}
+                            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-foreground focus:outline-none focus:border-white/20 transition-colors"
+                        >
+                            <option value="">All Years</option>
+                            {years.map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+
+                {/* Month Filter */}
+                {months.length > 0 && (
+                    <div>
+                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
+                            Month
+                        </label>
+                        <select
+                            value={selectedMonth}
+                            onChange={(e) => setSelectedMonth(e.target.value)}
+                            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-foreground focus:outline-none focus:border-white/20 transition-colors"
+                        >
+                            <option value="">All Months</option>
+                            {months.map((month) => (
+                                <option key={month} value={month}>
+                                    {month}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
+
                 {/* Order Value Range */}
                 <div>
                     <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
