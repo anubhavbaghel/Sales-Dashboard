@@ -515,7 +515,114 @@ a {
   display: none;
 }
 
+/* Mobile-specific utility classes */
+.mobile-hide {
+  display: none;
+}
+
+.desktop-hide {
+  display: none;
+}
+
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mobile-grid-2x2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.collapsible-section {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.min-h-0 {
+  min-height: 0;
+}
+
+/* Mobile-first media query (max-width: 767px) */
+@media (max-width: 767px) {
+  .mobile-hide {
+    display: flex !important;
+  }
+
+  .desktop-hide {
+    display: none !important;
+  }
+
+  /* Hide sidebar on mobile */
+  aside {
+    display: none !important;
+  }
+
+  /* Mobile layout adjustments */
+  .h-screen {
+    height: 100vh;
+    height: 100dvh;
+    /* Dynamic viewport height for mobile browsers */
+  }
+
+  /* Reduce padding on mobile */
+  .p-3 {
+    padding: 0.5rem;
+  }
+
+  .p-4 {
+    padding: 0.75rem;
+  }
+
+  .p-6 {
+    padding: 0.75rem;
+  }
+
+  /* Smaller gaps on mobile */
+  .gap-3 {
+    gap: 0.5rem;
+  }
+
+  .mb-3 {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Smaller text on mobile */
+  .text-3xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .text-2xl {
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+  }
+
+  .text-xl {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  /* Glass panel adjustments for mobile */
+  .glass-panel {
+    padding: 0.75rem;
+  }
+}
+
 @media (min-width: 768px) {
+  .mobile-hide {
+    display: none !important;
+  }
+
+  .desktop-hide {
+    display: flex !important;
+  }
+
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
