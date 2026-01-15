@@ -515,6 +515,10 @@ a {
   display: none;
 }
 
+/* =========================================
+   RESPONSIVE DESIGN SYSTEM
+   ========================================= */
+
 /* Mobile-specific utility classes */
 .mobile-hide {
   display: none;
@@ -533,12 +537,6 @@ a {
   background: rgba(255, 255, 255, 0.02);
 }
 
-.mobile-grid-2x2 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.5rem;
-}
-
 .collapsible-section {
   overflow: hidden;
   transition: max-height 0.3s ease;
@@ -548,8 +546,11 @@ a {
   min-height: 0;
 }
 
-/* Mobile-first media query (max-width: 767px) */
-@media (max-width: 767px) {
+/* -----------------------------------------------------------------
+   TIER 1: MOBILE (< 640px)
+   "No Scroll" Constraint enforced. Compact layout.
+   ----------------------------------------------------------------- */
+@media (max-width: 639px) {
   .mobile-hide {
     display: flex !important;
   }
@@ -563,58 +564,178 @@ a {
     display: none !important;
   }
 
-  /* Mobile layout adjustments */
+  /* Dynamic viewport height */
   .h-screen {
     height: 100vh;
     height: 100dvh;
-    /* Dynamic viewport height for mobile browsers */
   }
 
-  /* Reduce padding on mobile */
+  /* Mobile header - super compact */
+  .mobile-header {
+    padding: 0.25rem 0.5rem !important;
+    min-height: 40px;
+  }
+
+  /* Aggressive Mobile Padding Reduction */
+  .p-1 {
+    padding: 0.125rem;
+  }
+
   .p-3 {
-    padding: 0.5rem;
+    padding: 0.25rem;
   }
 
-  .p-4 {
-    padding: 0.75rem;
-  }
-
+  /* .p-4 overrides: specific to components below */
   .p-6 {
-    padding: 0.75rem;
+    padding: 0.375rem;
   }
 
-  /* Smaller gaps on mobile */
+  /* Minimal gaps on mobile */
+  .gap-1 {
+    gap: 0.125rem;
+  }
+
+  .gap-2 {
+    gap: 0.25rem;
+  }
+
   .gap-3 {
-    gap: 0.5rem;
+    gap: 0.25rem;
   }
 
-  .mb-3 {
-    margin-bottom: 0.5rem;
+  .gap-4 {
+    gap: 0.375rem;
   }
 
-  /* Smaller text on mobile */
-  .text-3xl {
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+  /* Typography scaling */
+  .text-xs {
+    font-size: 0.625rem;
+    line-height: 0.75rem;
   }
 
-  .text-2xl {
-    font-size: 1.125rem;
-    line-height: 1.5rem;
+  .text-sm {
+    font-size: 0.7rem;
+    line-height: 0.875rem;
+  }
+
+  .text-base {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+
+  .text-lg {
+    font-size: 0.875rem;
+    line-height: 1.125rem;
   }
 
   .text-xl {
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
   }
 
-  /* Glass panel adjustments for mobile */
+  .text-2xl,
+  .text-3xl {
+    font-size: 1rem;
+    line-height: 1.25rem;
+  }
+
+  /* Component adjustments */
   .glass-panel {
-    padding: 0.75rem;
+    padding: 0.375rem !important;
+  }
+
+  /* Stats Grid: 2x2 for Mobile */
+  .mobile-grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+    width: 100%;
+  }
+
+  .mobile-grid-2x2>div {
+    min-height: 55px;
+    min-width: 0;
+  }
+
+  .mobile-stats-card {
+    gap: 0.125rem !important;
+  }
+
+  .mobile-stats-card .p-3 {
+    padding: 0.25rem !important;
+  }
+
+  /* Chart container - constrained dimensions */
+  main .flex-1.min-h-0.w-full {
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  main .flex-1.min-h-0.w-full>.glass-panel {
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Button resizing */
+  .h-8,
+  .w-8 {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+
+  .h-10,
+  .w-10 {
+    height: 1.75rem;
+    width: 1.75rem;
   }
 }
 
-@media (min-width: 768px) {
+/* -----------------------------------------------------------------
+   TIER 2: TABLET (640px - 1023px)
+   Fluid layout. Sidebar Hidden (to maximize chart width). 
+   Stats in 1 Row. Relaxed Height.
+   ----------------------------------------------------------------- */
+@media (min-width: 640px) and (max-width: 1023px) {
+
+  /* Show mobile header toggles since sidebar is hidden */
+  .mobile-hide {
+    display: flex !important;
+  }
+
+  /* Hide sidebar to give space to content */
+  aside {
+    display: none !important;
+  }
+
+  /* Align stats in row (4 cols) to use width efficiently */
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Relax padding slightly compared to mobile */
+  .p-4 {
+    padding: 1rem;
+  }
+
+  /* Allow chart to grow */
+  main .flex-1.min-h-0.w-full {
+    min-height: 300px;
+    /* Decent height for tablet */
+    max-height: none;
+  }
+}
+
+/* -----------------------------------------------------------------
+   TIER 3: DESKTOP (>= 1024px)
+   Full Dashboard Layout. Sidebar Visible.
+   ----------------------------------------------------------------- */
+@media (min-width: 1024px) {
   .mobile-hide {
     display: none !important;
   }
@@ -623,29 +744,13 @@ a {
     display: flex !important;
   }
 
-  .md\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  /* Reset Sidebar visibility handled by flex classes in page.js */
 
-  .md\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .md\:grid-cols-4 {
+  .lg\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .md\:p-8 {
     padding: 2rem;
-  }
-
-  .md\:flex {
-    display: flex;
-  }
-}
-
-@media (min-width: 1024px) {
-  .lg\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

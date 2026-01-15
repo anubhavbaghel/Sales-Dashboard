@@ -5,7 +5,7 @@ export default function StatsCard({ title, value, icon: Icon, trend }) {
     const isNeutral = trend === 0;
 
     return (
-        <div className="glass-panel p-6 flex flex-col justify-between gap-4 transition-all duration-300 hover:scale-[1.02] hover:border-white/20">
+        <div className="glass-panel p-6 flex flex-col justify-between gap-4 transition-all duration-300 hover:scale-[1.02] hover:border-white/20 mobile-stats-card">
             <div className="flex items-start justify-between">
                 <div className="p-3 rounded-lg border border-white/10 bg-white/5">
                     <Icon className="h-6 w-6 text-foreground" strokeWidth={1.5} />

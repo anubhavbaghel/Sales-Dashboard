@@ -60,7 +60,7 @@ export default function ChartContainer({ barData, lineData, pieData }) {
                             }`}
                     >
                         <BarChart3 size={14} />
-                        <span>Bar</span>
+                        <span className="hidden md:inline">Bar</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('line')}
@@ -70,7 +70,7 @@ export default function ChartContainer({ barData, lineData, pieData }) {
                             }`}
                     >
                         <LucideLineChart size={14} />
-                        <span>Line</span>
+                        <span className="hidden md:inline">Line</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('pie')}
@@ -80,20 +80,20 @@ export default function ChartContainer({ barData, lineData, pieData }) {
                             }`}
                     >
                         <LucidePieChart size={14} />
-                        <span>Pie</span>
+                        <span className="hidden md:inline">Pie</span>
                     </button>
                 </div>
             </div>
 
-            <div className="w-full flex-1" style={{ minHeight: '300px' }}>
+            <div className="w-full flex-1 min-h-0">
                 <ResponsiveContainer width="100%" height="100%">
                     {activeTab === 'bar' ? (
-                        <BarChart data={barData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                        <BarChart data={barData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
                             <XAxis
                                 dataKey="name"
                                 stroke="var(--chart-axis)"
-                                fontSize={11}
+                                fontSize={10}
                                 tickLine={false}
                                 axisLine={false}
                                 tickFormatter={(value) => value.replace('Order #', '#')}
@@ -109,12 +109,12 @@ export default function ChartContainer({ barData, lineData, pieData }) {
                             <Bar dataKey="value" fill="#3b82f6" radius={[6, 6, 0, 0]} animationDuration={800} />
                         </BarChart>
                     ) : activeTab === 'line' ? (
-                        <LineChart data={lineData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                        <LineChart data={lineData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" vertical={false} />
                             <XAxis
                                 dataKey="name"
                                 stroke="var(--chart-axis)"
-                                fontSize={11}
+                                fontSize={10}
                                 tickLine={false}
                                 axisLine={false}
                                 tickFormatter={(value) => value.replace('Order #', '#')}
