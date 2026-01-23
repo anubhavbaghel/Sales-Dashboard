@@ -14,9 +14,10 @@ import {
     CartesianGrid,
     Tooltip,
     ResponsiveContainer,
-    Legend,
 } from 'recharts';
 import { BarChart3, LineChart as LucideLineChart, PieChart as LucidePieChart } from 'lucide-react';
+import Card from '@/components/atoms/Card';
+import Button from '@/components/atoms/Button';
 
 const COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#06b6d4'];
 
@@ -26,10 +27,10 @@ export default function ChartContainer({ barData, lineData, pieData }) {
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="glass-panel p-3 text-sm">
+                <Card className="text-sm">
                     <p className="font-bold mb-1 text-foreground">{label}</p>
                     <p className="text-foreground">{`Revenue: $${payload[0].value.toFixed(2)}`}</p>
-                </div>
+                </Card>
             );
         }
         return null;
@@ -38,50 +39,44 @@ export default function ChartContainer({ barData, lineData, pieData }) {
     const PieTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="glass-panel p-3 text-sm">
+                <Card className="text-sm">
                     <p className="font-bold mb-1 text-foreground">{payload[0].name}</p>
                     <p className="text-foreground">{`Revenue: $${payload[0].value.toFixed(2)}`}</p>
-                </div>
+                </Card>
             );
         }
         return null;
     };
 
     return (
-        <div className="glass-panel p-4 flex flex-col h-full">
+        <Card className="p-4 flex flex-col h-full">
             <div className="flex items-center justify-between mb-3">
                 <h2 className="text-base font-bold text-foreground">Sales Analytics</h2>
                 <div className="flex bg-white/5 rounded-lg p-1 gap-1 border border-white/10">
-                    <button
+                    <Button
                         onClick={() => setActiveTab('bar')}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === 'bar'
-                            ? 'bg-white text-black shadow-sm'
-                            : 'text-gray-400 hover:text-foreground hover:bg-white/5'
-                            }`}
+                        variant={activeTab === 'bar' ? 'active' : 'ghost'}
+                        className="px-3 py-1.5 text-xs"
+                        icon={BarChart3}
                     >
-                        <BarChart3 size={14} />
                         <span className="hidden md:inline">Bar</span>
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         onClick={() => setActiveTab('line')}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === 'line'
-                            ? 'bg-white text-black shadow-sm'
-                            : 'text-gray-400 hover:text-foreground hover:bg-white/5'
-                            }`}
+                        variant={activeTab === 'line' ? 'active' : 'ghost'}
+                        className="px-3 py-1.5 text-xs"
+                        icon={LucideLineChart}
                     >
-                        <LucideLineChart size={14} />
                         <span className="hidden md:inline">Line</span>
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         onClick={() => setActiveTab('pie')}
-                        className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === 'pie'
-                            ? 'bg-white text-black shadow-sm'
-                            : 'text-gray-400 hover:text-foreground hover:bg-white/5'
-                            }`}
+                        variant={activeTab === 'pie' ? 'active' : 'ghost'}
+                        className="px-3 py-1.5 text-xs"
+                        icon={LucidePieChart}
                     >
-                        <LucidePieChart size={14} />
                         <span className="hidden md:inline">Pie</span>
-                    </button>
+                    </Button>
                 </div>
             </div>
 
@@ -159,6 +154,6 @@ export default function ChartContainer({ barData, lineData, pieData }) {
                     )}
                 </ResponsiveContainer>
             </div>
-        </div>
+        </Card>
     );
 }

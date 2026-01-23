@@ -2,6 +2,11 @@
 
 import { useState } from 'react';
 import { Filter, X } from 'lucide-react';
+import Card from '@/components/atoms/Card';
+import Button from '@/components/atoms/Button';
+import Input from '@/components/atoms/Input';
+import Select from '@/components/atoms/Select';
+import Label from '@/components/atoms/Label';
 
 export default function FilterPanel({ onFilterChange, activeFilters, products = [], years = [], months = [] }) {
     const [minValue, setMinValue] = useState(activeFilters.minValue || '');
@@ -38,7 +43,7 @@ export default function FilterPanel({ onFilterChange, activeFilters, products = 
     const hasActiveFilters = minValue || maxValue || selectedProduct || selectedYear || selectedMonth;
 
     return (
-        <div className="glass-panel p-3">
+        <Card>
             <div className="flex items-center gap-2 mb-3">
                 <Filter size={16} className="text-foreground" />
                 <h3 className="text-sm font-bold text-foreground">Filters</h3>
@@ -53,64 +58,44 @@ export default function FilterPanel({ onFilterChange, activeFilters, products = 
                 {/* Year Filter */}
                 {years.length > 0 && (
                     <div>
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
-                            Year
-                        </label>
-                        <select
+                        <Label>Year</Label>
+                        <Select
                             value={selectedYear}
                             onChange={(e) => setSelectedYear(e.target.value)}
-                            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-foreground focus:outline-none focus:border-white/20 transition-colors"
-                        >
-                            <option value="">All Years</option>
-                            {years.map((year) => (
-                                <option key={year} value={year}>
-                                    {year}
-                                </option>
-                            ))}
-                        </select>
+                            placeholder="All Years"
+                            options={years.map(y => ({ value: y, label: y }))}
+                        />
                     </div>
                 )}
 
                 {/* Month Filter */}
                 {months.length > 0 && (
                     <div>
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
-                            Month
-                        </label>
-                        <select
+                        <Label>Month</Label>
+                        <Select
                             value={selectedMonth}
                             onChange={(e) => setSelectedMonth(e.target.value)}
-                            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-foreground focus:outline-none focus:border-white/20 transition-colors"
-                        >
-                            <option value="">All Months</option>
-                            {months.map((month) => (
-                                <option key={month} value={month}>
-                                    {month}
-                                </option>
-                            ))}
-                        </select>
+                            placeholder="All Months"
+                            options={months.map(m => ({ value: m, label: m }))}
+                        />
                     </div>
                 )}
 
                 {/* Order Value Range */}
                 <div>
-                    <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
-                        Order Value
-                    </label>
+                    <Label>Order Value</Label>
                     <div className="flex flex-col gap-2">
-                        <input
+                        <Input
                             type="number"
                             placeholder="Min"
                             value={minValue}
                             onChange={(e) => setMinValue(e.target.value)}
-                            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-white/20 transition-colors"
                         />
-                        <input
+                        <Input
                             type="number"
                             placeholder="Max"
                             value={maxValue}
                             onChange={(e) => setMaxValue(e.target.value)}
-                            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-white/20 transition-colors"
                         />
                     </div>
                 </div>
@@ -118,41 +103,35 @@ export default function FilterPanel({ onFilterChange, activeFilters, products = 
                 {/* Product Filter */}
                 {products.length > 0 && (
                     <div>
-                        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2 block">
-                            Product
-                        </label>
-                        <select
+                        <Label>Product</Label>
+                        <Select
                             value={selectedProduct}
                             onChange={(e) => setSelectedProduct(e.target.value)}
-                            className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-foreground focus:outline-none focus:border-white/20 transition-colors"
-                        >
-                            <option value="">All Products</option>
-                            {products.map((product) => (
-                                <option key={product} value={product}>
-                                    {product}
-                                </option>
-                            ))}
-                        </select>
+                            placeholder="All Products"
+                            options={products.map(p => ({ value: p, label: p }))}
+                        />
                     </div>
                 )}
 
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-2 pt-2">
-                    <button
+                    <Button
                         onClick={handleApplyFilters}
-                        className="w-full px-4 py-2 bg-white text-black rounded text-sm font-medium hover:bg-white/90 transition-colors"
+                        variant="primary"
+                        className="w-full"
                     >
                         Apply Filters
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         onClick={handleReset}
-                        className="w-full px-4 py-2 bg-white/5 border border-white/10 text-foreground rounded text-sm font-medium hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+                        variant="secondary"
+                        className="w-full"
+                        icon={X}
                     >
-                        <X size={14} />
                         Reset
-                    </button>
+                    </Button>
                 </div>
             </div>
-        </div>
+        </Card>
     );
 }
