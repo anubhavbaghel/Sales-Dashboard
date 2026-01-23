@@ -1,5 +1,5 @@
 import './globals.css';
-import { ThemeProvider } from '@/components/ThemeProvider';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata = {

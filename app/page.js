@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { fetchSalesData } from '@/lib/api';
-import StatsCard from '@/components/StatsCard';
-import ChartContainer from '@/components/ChartContainer';
-import FilterPanel from '@/components/FilterPanel';
+import StatsCard from '@/components/molecules/StatsCard';
+import ChartContainer from '@/components/organisms/ChartContainer';
+import FilterPanel from '@/components/organisms/FilterPanel';
 import { DollarSign, ShoppingBag, CreditCard, TrendingUp, Filter } from 'lucide-react';
-import { useTheme } from '@/components/ThemeProvider';
+import { useTheme } from '@/components/providers/ThemeProvider';
 import { Sun, Moon } from 'lucide-react';
 
 export default function Home() {
